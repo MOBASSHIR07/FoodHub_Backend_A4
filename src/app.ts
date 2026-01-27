@@ -1,12 +1,18 @@
-import express from "express"
-import cors from "cors"
-const app = express()
-app.use(express.json())
+import express from "express";
+import cors from "cors";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth.js";
 
-app.use(cors())
-app.get('/', (req,res)=>{
-    res.send("Server is running on ")
-})
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 
-export default app
+app.all('/api/auth/*any', toNodeHandler(auth));
+
+app.get('/', (req, res) => {
+    res.send("FoodHub Server is running 🍱");
+});
+
+export default app;
