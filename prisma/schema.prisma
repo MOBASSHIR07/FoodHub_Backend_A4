@@ -24,9 +24,12 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role        String?  @default("CUSTOMER")
-  phoneNumber String?
-  isActive    Boolean? @default(true)
+  role            String?          @default("CUSTOMER")
+  phoneNumber     String?
+  isActive        Boolean?         @default(true)
+  providerProfile ProviderProfile?
+
+  status String? @default("ACTIVE")
 
   @@map("user")
 }
@@ -77,4 +80,22 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// Provider Profile
+
+model ProviderProfile {
+  id           String  @id @default(uuid())
+  businessName String
+  address      String
+  description  String?
+  coverImage   String?
+  rating       Float   @default(0.0)
+  userId       String  @unique
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("provider_profile")
 }
