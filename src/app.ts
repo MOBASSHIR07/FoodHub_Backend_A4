@@ -5,6 +5,8 @@ import { auth } from "./lib/auth.js";
 import { authRoute } from "./modules/auth/auth.Route.js";
 import { adminRoute } from "./modules/admin/admin.Route.js";
 import globalErrorHandler from "./middleware/globalErrorHandler.js";
+import { orderRoute } from "./modules/orders/order.Route.js";
+import { mealRoute } from "./modules/meal/meal.Route.js";
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.get('/', (req, res) => {
 
 app.use("/auth", authRoute)
 app.use('/admin', adminRoute)
+app.use('/order', orderRoute)
+app.use('/meal', mealRoute)
 
 app.use(globalErrorHandler);
 export default app;
