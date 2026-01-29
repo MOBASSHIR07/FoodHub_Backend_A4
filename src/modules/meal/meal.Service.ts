@@ -74,11 +74,33 @@ const getAllMealDB = async(filter:any)=>{
 
 }
 
+const getMealByIdDB = async (mealId: string) => {
+    return await prisma.meal.findUnique({
+        where: {
+            id: mealId,
+        },
+        include: {
+            category: {
+                select: { name: true }
+            },
+            provider: {
+                select: { 
+                    businessName: true, 
+                    coverImage:true
+                    
+                    
+                }
+            }
+        }
+    });
+};
+
 
 
 export const mealService = {
     createMealDB,
     updateMealDB,
     deleteMealDB,
-    getAllMealDB
+    getAllMealDB,
+    getMealByIdDB
 };

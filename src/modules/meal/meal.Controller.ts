@@ -78,9 +78,32 @@ const getAllMeal = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
+const getMealById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const meal = await mealService.getMealByIdDB(id as string);
+
+        if (!meal) {
+            return res.status(404).json({
+                success: false,
+                message: "Meal not found!",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Meal details retrieved successfully",
+            data: meal,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 export const mealController = {
     createMeal,
     updateMeal,
     deleteMeal,
-    getAllMeal
+    getAllMeal,
+    getMealById
 };
