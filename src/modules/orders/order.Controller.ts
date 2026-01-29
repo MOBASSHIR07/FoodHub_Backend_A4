@@ -17,7 +17,18 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         next(error);
     }
 };
+const updateOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        const providerId = req.user?.id!
+        const result = await orderService.updateOrderStatusDB(id as string, providerId, status);
+        res.status(200).json({ success: true, message: `Status changed to ${status}`, data: result });
+    } catch (error) { next(error); }
+};
+
 
 export const orderController = {
-    createOrder
+    createOrder,
+    updateOrderStatus
 };

@@ -48,6 +48,15 @@ const orderNumber = `FH-${Math.floor(10000 + Math.random()*456)}`
 
 }
 
+const updateOrderStatusDB = async (id: string, providerId: string, status: string) => {
+    
+    return await prisma.order.update({
+        where: { id },
+        data: { status }
+    });
+};
+
 export const orderService = {
-    createOrderDB
+    createOrderDB,
+    updateOrderStatusDB
 }
