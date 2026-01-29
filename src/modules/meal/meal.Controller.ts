@@ -27,20 +27,20 @@ const createMeal = async (req: Request, res: Response, next: NextFunction) => {
 
 const updateMeal = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {id}   = req.params!
-         if(!id || Array.isArray(id)){
+        const { id } = req.params!
+        if (!id || Array.isArray(id)) {
             throw new Error("Id Required")
         }
         const userId = req.user?.id
 
-       const profile = await prisma.providerProfile.findUnique({
+        const profile = await prisma.providerProfile.findUnique({
             where: { id: userId! }
         });
-        
-        if(!profile){
+
+        if (!profile) {
             throw new Error("Provider not found")
         }
-       
+
         const result = await mealService.updateMealDB(id, profile?.id, req.body);
         res.status(200).json({ success: true, message: "Meal updated", data: result });
     } catch (error) { next(error); }
@@ -49,7 +49,7 @@ const updateMeal = async (req: Request, res: Response, next: NextFunction) => {
 const deleteMeal = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-        if(!id || Array.isArray(id)){
+        if (!id || Array.isArray(id)) {
             throw new Error("Id Required")
         }
         const providerId = req.user?.id!;
@@ -58,8 +58,29 @@ const deleteMeal = async (req: Request, res: Response, next: NextFunction) => {
     } catch (error) { next(error); }
 };
 
+
+const getAllMeal = async (req: Request, res: Response, next: NextFunction) => {
+
+    const filter = req.query
+
+    try {
+        const result = await mealService.getAllMealDB(filter)
+
+        res.status(200).json({
+            success: true,
+            message: "All Meal Retrive",
+            data: result.data,
+            
+        });
+
+    } catch (error: any) {
+        next(error)
+    }
+}
+
 export const mealController = {
     createMeal,
     updateMeal,
-    deleteMeal
+    deleteMeal,
+    getAllMeal
 };

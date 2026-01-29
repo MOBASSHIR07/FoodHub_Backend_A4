@@ -1,3 +1,4 @@
+import { equal } from "node:assert";
 import { prisma } from "../../lib/prisma.js";
 
 const createMealDB = async (providerId: string, payload: any) => {
@@ -35,8 +36,39 @@ const deleteMealDB = async (id: string, providerId: string) => {
 };
 
 
+const getAllMealDB = async(filter:any)=>{
+
+
+    const {cuisine , dietaryPreferences, price  } = filter
+    
+    let where:any = {}
+
+    if(cuisine){
+        where.cuisine = { equals:cuisine , mode:"insensitive"}
+    }
+    
+    if(dietaryPreferences){
+        where.dietaryPreferences = { equals:dietaryPreferences , mode:"insensitive"}
+    }
+    
+   const sortOrder = price === "true" ? "desc" : "asc";
+    
+
+    const [ data ] = await prisma.$transaction([
+        prisma.meal.findMany({where , orderBy:{price:sortOrder}, include:{category:true,provider:true}}),
+        
+    ])
+
+    
+    return { data };
+
+}
+
+
+
 export const mealService = {
     createMealDB,
     updateMealDB,
-    deleteMealDB
+    deleteMealDB,
+    getAllMealDB
 };
