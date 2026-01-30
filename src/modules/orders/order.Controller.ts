@@ -94,10 +94,30 @@ const getProviderOrders = async (req: Request, res: Response, next: NextFunction
 };
 
 
+const trackOrder = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user?.id!; 
+        
+        const result = await orderService.getOrderTrackingDB(id as string, userId);
+
+        if (!result) {
+            return res.status(404).json({ success: false, message: "Order not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Order status retrieved",
+            data: result
+        });
+    } catch (error) { next(error); }
+};
+
 export const orderController = {
     createOrder,
     updateOrderStatus,
     getMyOrders,
     getOrderById,
-    getProviderOrders
+    getProviderOrders,
+    trackOrder
 };

@@ -160,11 +160,28 @@ const getProviderOrdersDB = async (userId: string) => {
 };
 
 
+const getOrderTrackingDB = async (orderId: string, userId: string) => {
+    return await prisma.order.findFirst({
+        where: {
+            id: orderId,
+           customerId:userId
+        },
+        select:{
+            id:true,
+            status:true,
+            updatedAt:true
+
+        }
+    });
+};
+
+
 
 export const orderService = {
     createOrderDB,
     updateOrderStatusDB,
     getMyOrdersDB,
     getOrderByIdDB,
-    getProviderOrdersDB
+    getProviderOrdersDB,
+    getOrderTrackingDB
 }

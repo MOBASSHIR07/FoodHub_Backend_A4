@@ -24,10 +24,32 @@ const getProviderByIdDB = async (providerId: string) => {
 };
 
 
+// const getProviderProfileWithMenuDB = async (providerId: string) => {
+//     return await prisma.providerProfile.findUnique({
+//         where: {
+//             userId: providerId, 
+//         },
+//         include: {
+//             user: {
+//                 select: {
+//                     name: true,
+//                     image: true,
+//                 }
+//             },
+            
+//             meals: {
+//                 where: {
+//                     isAvailable: true 
+//                 }
+//             }
+//         }
+//     });
+// };
 
 
 
 export const providerService = {
     getAllProvidersDB,
-    getProviderByIdDB
+    getProviderByIdDB,
+    
 }

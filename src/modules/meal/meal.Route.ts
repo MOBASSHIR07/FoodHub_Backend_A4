@@ -8,7 +8,7 @@ const router = Router();
 router.post("/add-meal", authMiddleware("PROVIDER"), mealController.createMeal);
 router.put("/update/:id", authMiddleware("PROVIDER"), mealController.updateMeal);
 router.delete("/delete/:id", authMiddleware("PROVIDER"), mealController.deleteMeal);
-router.get("/all-meal", authMiddleware("CUSTOMER","PROVIDER", "ADMIN"), mealController.getAllMeal)
+router.get("/all-meal", authMiddleware("CUSTOMER","PROVIDER", "ADMIN"), mealController.getAllMeal)// need to change
 router.get('/:id', authMiddleware("CUSTOMER","PROVIDER", "ADMIN"), mealController.getMealById);
 
 export const mealRoute = router;
