@@ -20,6 +20,15 @@ export const auth = betterAuth({
     databaseHooks: {
         user: {
             create: {
+                before: async(user)=>{
+                    const data = user as any;
+                    if(data.role ==="ADMIN"){
+                        throw new Error("UNAUTHORIZED_ROLE_REGISTRATION");
+                    }
+                    
+
+                },
+
                 after: async (user) => {
                     if (user.role ==="PROVIDER"){
                         await prisma.providerProfile.create({
