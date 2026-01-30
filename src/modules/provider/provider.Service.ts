@@ -48,8 +48,24 @@ const getProviderByIdDB = async (providerId: string) => {
 
 
 
+
+const updateProviderProfileDB = async (userId: string, data: any) => {
+    return await prisma.providerProfile.update({
+        where: { 
+            userId: userId 
+        },
+        data: {
+            businessName: data.businessName ?? undefined,
+            address: data.address ?? undefined,
+            description: data.description ?? undefined,
+            coverImage: data.coverImage ?? undefined,
+    
+        }
+    });
+};
+
 export const providerService = {
     getAllProvidersDB,
     getProviderByIdDB,
-    
+    updateProviderProfileDB
 }

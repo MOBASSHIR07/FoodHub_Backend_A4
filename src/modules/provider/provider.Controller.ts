@@ -51,9 +51,25 @@ const getProviderById = async (req: Request, res: Response, next: NextFunction) 
 //     }
 // };
 
+const updateProviderProfile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.user?.id!;
+        const { rating, ...updateData } = req.body;
 
+        const result = await providerService.updateProviderProfileDB(userId, updateData);
+
+        res.status(200).json({
+            success: true,
+            message: "Provider business details updated",
+            data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const providerController = {
     getAllProviders,
     getProviderById,
+    updateProviderProfile
 }

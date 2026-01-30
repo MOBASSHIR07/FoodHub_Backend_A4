@@ -9,6 +9,8 @@ import { orderRoute } from "./modules/orders/order.Route.js";
 import { mealRoute } from "./modules/meal/meal.Route.js";
 import { providerRoute } from "./modules/provider/provider.Route.js";
 import { reviewRoute } from "./modules/review/review.Route.js";
+import { customerRoute } from "./modules/customer/customer.Route.js";
+
 
 const app = express();
 
@@ -28,6 +30,7 @@ app.use('/order', orderRoute)
 app.use('/meal', mealRoute)
 app.use('/provider', providerRoute)
 app.use('/review', reviewRoute)
+app.use('/customer', customerRoute)
 
 app.use(globalErrorHandler);
 export default app;
