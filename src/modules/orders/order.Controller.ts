@@ -17,6 +17,7 @@ const createOrder = async (req: Request, res: Response, next: NextFunction) => {
         next(error);
     }
 };
+////////////////////////////////////////////////////////////////////////////////////
 const updateOrderStatus = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
@@ -26,7 +27,7 @@ const updateOrderStatus = async (req: Request, res: Response, next: NextFunction
         res.status(200).json({ success: true, message: `Status changed to ${status}`, data: result });
     } catch (error) { next(error); }
 };
-
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 const getMyOrders = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -74,9 +75,29 @@ const getOrderById = async (req: Request, res: Response, next: NextFunction) => 
 };
 
 
+const getProviderOrders = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = req.user?.id; 
+        
+        if (!userId) throw new Error("Unauthorized access");
+
+        const result = await orderService.getProviderOrdersDB(userId);
+
+        res.status(200).json({
+            success: true,
+            message: "Incoming orders retrieved successfully",
+            data: result
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
 export const orderController = {
     createOrder,
     updateOrderStatus,
     getMyOrders,
-    getOrderById
+    getOrderById,
+    getProviderOrders
 };
