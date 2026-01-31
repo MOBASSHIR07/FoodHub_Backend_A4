@@ -10,7 +10,7 @@ export const auth = betterAuth({
         provider: "postgresql",
 
     }),
-    trustedOrigins: [process.env.TRUSTED_AUTH_URL!],
+    trustedOrigins: [process.env.TRUSTED_AUTH_URL! , "https://foodhub-backend-a4-2.onrender.com"],
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,
