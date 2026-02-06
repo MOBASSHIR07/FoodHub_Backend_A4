@@ -76,7 +76,7 @@ const updateOrderStatusDB = async (id: string, userId: string, status: string, r
         }
 
 
-        if (currentOrder.status !== "PLACED") {
+        if (currentOrder.status !== "PENDING") {
             throw new Error("You cannot cancel the order now (it is already confirmed or preparing)");
         }
 
