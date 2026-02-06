@@ -11,6 +11,8 @@ const createMealDB = async (providerId: string, payload: any) => {
             isAvailable: payload.isAvailable ?? true,
             categoryId: payload.categoryId, 
             providerId: providerId,        
+            cuisine: payload.cuisine,
+            dietaryPreferences: payload.dietaryPreferences,
         }
     });
 };
