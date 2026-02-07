@@ -16,7 +16,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: "http://localhost:5000", 
+  origin: "https://food-hub-frontend-a4.vercel.app",  
   credentials: true,              
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
