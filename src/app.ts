@@ -31,7 +31,12 @@ app.use(express.json());
 
 
 
-
+app.get('/get-session-token', (req, res) => {
+  const cookieHeader = req.headers.cookie || '';
+  const tokenMatch = cookieHeader.match(/__Secure-better-auth\.session_token=([^;]+)/);
+  const token = tokenMatch ? tokenMatch[1] : null;
+  res.json({ token });
+});
 app.get('/', (req, res) => {
     res.send("FoodHub Server is running 🍱");
 });
