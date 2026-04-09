@@ -10,10 +10,23 @@ export const auth = betterAuth({
         provider: "postgresql",
 
     }),
-    trustedOrigins: [process.env.TRUSTED_AUTH_URL! , "https://foodhub-backend-a4-2.onrender.com"],
+    // trustedOrigins: [process.env.TRUSTED_AUTH_URL! , "https://foodhub-backend-a4-2.onrender.com"],
+     baseURL: process.env.BETTER_AUTH_URL,
+      trustedOrigins: [
+        "http://localhost:5000",                        // ✅ local frontend
+        "https://food-hub-frontend-a4.vercel.app",
+        "https://foodhub-backend-a4-2.onrender.com",
+    ],
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,
+    },
+      // social new
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        },
     },
 
     // -------------------- better auth logic, like i am writing on controller and service

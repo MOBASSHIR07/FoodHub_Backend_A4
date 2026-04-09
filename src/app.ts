@@ -16,16 +16,21 @@ const app = express();
 
 
 app.use(cors({
-  origin: "https://food-hub-frontend-a4.vercel.app",  
+  // origin: "https://food-hub-frontend-a4.vercel.app",  
+   origin: [
+    "http://localhost:5000",                          // ✅ local frontend
+    "https://food-hub-frontend-a4.vercel.app",        // ✅ deployed frontend
+  ],
   credentials: true,              
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+app.all('/api/auth/*any', toNodeHandler(auth));
 app.use(express.json());
 
 
-app.all('/api/auth/*any', toNodeHandler(auth));
+
 
 app.get('/', (req, res) => {
     res.send("FoodHub Server is running 🍱");
