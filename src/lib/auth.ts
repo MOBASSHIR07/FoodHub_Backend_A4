@@ -15,6 +15,7 @@ export const auth = betterAuth({
      trustedOrigins: [
         "http://localhost:5000",                       
         "https://food-hub-frontend-a4.vercel.app",
+        "https://foodhub-backend-a4.onrender.com",
         
     ],
     emailAndPassword: {
