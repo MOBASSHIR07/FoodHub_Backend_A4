@@ -11,19 +11,26 @@ export const auth = betterAuth({
 
     }),
     // trustedOrigins: [process.env.TRUSTED_AUTH_URL! , "https://foodhub-backend-a4-2.onrender.com"],
-     baseURL: process.env.BETTER_AUTH_URL,
-     trustedOrigins: [
+    baseURL: process.env.BETTER_AUTH_URL,
+    trustedOrigins: [
         // "http://localhost:5000",                       
         "https://food-hub-frontend-a4.vercel.app",
         "https://foodhub-backend-a4.onrender.com",
-        
+
     ],
-    
+    account: {
+        skipStateCookieCheck: true,
+    },
+
+    // advanced: {
+    //     useSecureCookies: true,
+    // },
+
     emailAndPassword: {
         enabled: true,
         requireEmailVerification: false,
     },
-      // social new
+    // social new
     socialProviders: {
         google: {
             clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -35,42 +42,42 @@ export const auth = betterAuth({
     databaseHooks: {
         user: {
             create: {
-                before: async(user)=>{
+                before: async (user) => {
                     const data = user as any;
-                    if(data.role ==="ADMIN"){
+                    if (data.role === "ADMIN") {
                         throw new Error("UNAUTHORIZED_ROLE_REGISTRATION");
                     }
-                    
+
 
                 },
 
                 after: async (user) => {
-                    if (user.role ==="PROVIDER"){
+                    if (user.role === "PROVIDER") {
                         await prisma.providerProfile.create({
-                            data:{
-                                userId:user.id,
+                            data: {
+                                userId: user.id,
                                 businessName: `${user.name || 'New'}'s Kitchen `,
 
                             }
                         })
                     }
-                    }
+                }
             }
         },
-        session:{
-            create:{
-                before: async(session)=>{
-                 
+        session: {
+            create: {
+                before: async (session) => {
+
                     const user = await prisma.user.findUnique({
-                        where:{
+                        where: {
                             id: session.userId
                         }
                     })
-                    if(user?.status==="SUSPENDED" || user?.isActive===false){
+                    if (user?.status === "SUSPENDED" || user?.isActive === false) {
                         throw new Error("ACCOUNT_SUSPENDED")
                     }
                 }
-                
+
             }
         }
     },
