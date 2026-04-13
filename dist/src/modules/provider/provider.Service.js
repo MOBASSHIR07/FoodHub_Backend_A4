@@ -1,0 +1,60 @@
+import { prisma } from "../../lib/prisma.js";
+const getAllProvidersDB = async () => {
+    return await prisma.providerProfile.findMany({
+        include: {
+            _count: {
+                select: { meals: true }
+            }
+        }
+    });
+};
+const getProviderByIdDB = async (providerId) => {
+    return await prisma.providerProfile.findUnique({
+        where: { id: providerId },
+        include: {
+            meals: {
+                where: { isAvailable: true },
+                include: { category: true }
+            }
+        }
+    });
+};
+// const getProviderProfileWithMenuDB = async (providerId: string) => {
+//     return await prisma.providerProfile.findUnique({
+//         where: {
+//             userId: providerId, 
+//         },
+//         include: {
+//             user: {
+//                 select: {
+//                     name: true,
+//                     image: true,
+//                 }
+//             },
+//             meals: {
+//                 where: {
+//                     isAvailable: true 
+//                 }
+//             }
+//         }
+//     });
+// };
+const updateProviderProfileDB = async (userId, data) => {
+    return await prisma.providerProfile.update({
+        where: {
+            userId: userId
+        },
+        data: {
+            businessName: data.businessName ?? undefined,
+            address: data.address ?? undefined,
+            description: data.description ?? undefined,
+            coverImage: data.coverImage ?? undefined,
+        }
+    });
+};
+export const providerService = {
+    getAllProvidersDB,
+    getProviderByIdDB,
+    updateProviderProfileDB
+};
+//# sourceMappingURL=provider.Service.js.map

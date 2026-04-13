@@ -1,0 +1,94 @@
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { prisma } from "./prisma.js";
+export const auth = betterAuth({
+    database: prismaAdapter(prisma, {
+        provider: "postgresql",
+    }),
+    // trustedOrigins: [process.env.TRUSTED_AUTH_URL! , "https://foodhub-backend-a4-2.onrender.com"],
+    baseURL: process.env.BETTER_AUTH_URL,
+    trustedOrigins: [
+        // "http://localhost:5000",                       
+        "https://food-hub-frontend-a4.vercel.app",
+        "https://foodhub-backend-a4.onrender.com",
+    ],
+    account: {
+        skipStateCookieCheck: true,
+    },
+    // advanced: {
+    //     useSecureCookies: true,
+    // },
+    emailAndPassword: {
+        enabled: true,
+        requireEmailVerification: false,
+    },
+    // social new
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        },
+    },
+    // -------------------- better auth logic, like i am writing on controller and service
+    databaseHooks: {
+        user: {
+            create: {
+                before: async (user) => {
+                    const data = user;
+                    if (data.role === "ADMIN") {
+                        throw new Error("UNAUTHORIZED_ROLE_REGISTRATION");
+                    }
+                },
+                after: async (user) => {
+                    if (user.role === "PROVIDER") {
+                        await prisma.providerProfile.create({
+                            data: {
+                                userId: user.id,
+                                businessName: `${user.name || 'New'}'s Kitchen `,
+                            }
+                        });
+                    }
+                }
+            }
+        },
+        session: {
+            create: {
+                before: async (session) => {
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            id: session.userId
+                        }
+                    });
+                    if (user?.status === "SUSPENDED" || user?.isActive === false) {
+                        throw new Error("ACCOUNT_SUSPENDED");
+                    }
+                }
+            }
+        }
+    },
+    //------------------------------ additional fields -------------------------------
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                required: false,
+                defaultValue: "CUSTOMER"
+            },
+            phoneNumber: {
+                type: "string",
+                required: false,
+            },
+            isActive: {
+                type: "boolean",
+                required: false,
+                defaultValue: true,
+            },
+            status: {
+                type: "string",
+                required: false,
+                defaultValue: "ACTIVE"
+            }
+        }
+    }
+});
+//# sourceMappingURL=auth.js.map
